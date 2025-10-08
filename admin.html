@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Aurora Tombola — Admin</title>
+</head>
+<body>
+  <h1>Admin</h1>
+
+  <p>
+    <label>Admin token:
+      <input id="tok" type="password" placeholder="introdu token-ul aici">
+    </label>
+    <button id="saveTok">Use token</button>
+  </p>
+
+  <hr>
+
+  <p>
+    <button id="countBtn">Count entries</button>
+    <span id="countOut"></span>
+  </p>
+
+  <p>
+    <button id="csvBtn">Download CSV</button>
+  </p>
+
+  <h3>Draw winners</h3>
+  <p>
+    <label>How many winners? (1–20):
+      <input id="n" type="number" value="3" min="1" max="20">
+    </label>
+  </p>
+  <p>Prizes (one per line):</p>
+  <textarea id="prizes" rows="5" cols="50">Espressor de cafea
+Pachet cadou 100 Lei
+Pizza pentru 2 persoane</textarea><br><br>
+  <button id="drawBtn">Draw now</button>
+  <pre id="drawOut" style="white-space:pre-wrap;"></pre>
+
+  <h3>Winners so far</h3>
+  <button id="winnersBtn">Show winners</button>
+  <pre id="winnersOut" style="white-space:pre-wrap;"></pre>
+
+  <script>
+    let token = '';
+    const h = () => token ? {'x-admin-token': token} : {};
+    document.getElementById('saveTok').onclick = () => {
+      token = document.getElementById('tok').value.trim();
+      alert('Token saved.');
+    };
+    document.getElementById('countBtn').onclick = async () => {
+      const r = await fetch('/admin/count', {headers: h()});
+      const j = await r.json();
+      document.getElementById('countOut').textContent = 'Entries: ' + (j.count ?? '?');
+    };
+    document.getElementById('csvBtn').onclick = () => {
+      if (!token) return alert('Set token first');
+      window.location = '/admin/entries.csv?token=' + encodeURIComponent(token);
+    };
+    document.getElementById('drawBtn').onclick = async () => {
+      const n = parseInt(document.getElementById('n').value || '1', 10);
+      const prizes = document.getElementById('prizes').value.split('\n').map(s=>s.trim()).filter(Boolean);
+      const r = await fetch('/admin/draw?n=' + n, {
+        method: 'POST',
+        headers: Object.assign({'Content-Type':'application/json'}, h()),
+        body: JSON.stringify({prizes})
+      });
+      const j = await r.json();
+      document.getElementById('drawOut').textContent = JSON.stringify(j, null, 2);
+    };
+    document.getElementById('winnersBtn').onclick = async () => {
+      const r = await fetch('/admin/winners', {headers: h()});
+      const j = await r.json();
+      document.getElementById('winnersOut').textContent = JSON.stringify(j, null, 2);
+    };
+  </script>
+</body>
+</html>

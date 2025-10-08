@@ -1,0 +1,21 @@
+{
+  "name": "aurora-tombola",
+  "version": "1.0.0",
+  "description": "This is a small Node.js + Express + SQLite app to collect phone numbers for a **free promotional raffle** and pick winners fairly.",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "sqlite3": "^5.1.7"
+  }
+}

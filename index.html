@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tombola Aurora Bistro</title>
+</head>
+<body>
+  <div style="text-align:center;">
+    <img src="logo.jpg" alt="Aurora Bistro Logo" style="max-width:200px;margin-top:10px;">
+    <h2>🎁 Tombola Aurora Bistro 2025</h2>
+    <p><strong>Regulă / Szabály:</strong><br>
+      🇷🇴 Pentru a participa, cumpără o pizza și completează formularul de mai jos.<br>
+      🇭🇺 A részvételhez vásárolj egy pizzát és töltsd ki az alábbi űrlapot.
+    </p>
+  </div>
+  <hr>
+
+  <h1>🎄 Aurora Bistro Tombola 2025</h1>
+  <form id="tombolaForm">
+    <label>Nume (opțional) / Név (opcionális):
+      <input name="name" autocomplete="name">
+    </label><br><br>
+    <label>Număr de telefon* / Telefonszám*:
+      <input name="phone" required inputmode="tel" placeholder="+40...">
+    </label><br><br>
+    <label>
+      <input type="checkbox" name="consent" required>
+      Sunt de acord / Hozzájárulok ca datele mele să fie prelucrate pentru tombola.
+    </label><br><br>
+    <button type="submit">Înscrie-mă / Jelentkezem</button>
+  </form>
+  <p id="msg" style="margin-top:10px;"></p>
+  <script>
+    document.getElementById('tombolaForm').onsubmit = async (e)=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      data.consent = !!data.consent;
+      const res = await fetch('http://localhost:3000/api/subscribe', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(data)
+      });
+      const json = await res.json();
+      document.getElementById('msg').textContent = json.message || 'Trimis.';
+    };
+  </script>
+</body>
+</html>
