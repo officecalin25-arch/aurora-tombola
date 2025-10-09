@@ -7,6 +7,12 @@ const sqlite3 = require('sqlite3').verbose();
 const crypto = require('crypto');
 const path = require('path');
 const app = express();
+const express = require('express');
+const app = express();
+
+app.use(express.static(require('path').join(__dirname, 'public')));
+
+
 
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'change-me-strong-token';
 
