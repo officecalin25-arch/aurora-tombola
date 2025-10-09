@@ -1,61 +1,113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Aurora Bistro Tombola 2025</title>
+  <title>Aurora Bistro – Nyereményjáték</title>
   <style>
-    body { font-family: system-ui, Arial, sans-serif; max-width: 640px; margin: 24px auto; padding: 0 12px; }
-    header, footer { text-align:center; }
-    img { max-width: 200px; display:block; margin: 12px auto; }
-    form { margin-top: 16px; }
-    label { display:block; margin: 10px 0; }
-    button { padding: 10px 16px; font-size: 16px; cursor: pointer; }
-    #msg { margin-top: 12px; font-weight: 600; }
+    :root{--bg:#fff7ef;--card:#ffffff;--brand:#b22222}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#222}
+    .wrap{max-width:820px;margin:0 auto;padding:20px}
+    header{text-align:center;margin:10px 0 20px}
+    header img{max-width:160px;border-radius:12px}
+    h1{color:var(--brand);margin:10px 0 6px;font-size:2.1rem}
+    .card{background:var(--card);border-radius:14px;box-shadow:0 3px 14px rgba(0,0,0,.06);padding:18px;margin:16px 0}
+    .muted{color:#666}
+    form label{display:block;margin:10px 0 4px}
+    input[type="text"],input[type="tel"]{width:100%;max-width:420px;padding:10px 12px;border:1px solid #ddd;border-radius:10px;font-size:1rem}
+    button{background:var(--brand);color:#fff;border:0;border-radius:10px;padding:12px 18px;font-size:1rem;cursor:pointer}
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .prizes li{margin:6px 0}
+    .footer{margin-top:8px;font-size:.95rem}
   </style>
 </head>
 <body>
-  <header>
-    <img src="logo.jpg" alt="Aurora Bistro Logo">
-    <h1>🎄 Aurora Bistro Tombola 2025</h1>
-    <p><strong>Szabály:</strong><br>
-      A részvételhez vásárolj egy pizzát, és töltsd ki az alábbi űrlapot.
-    </p>
-  </header>
+  <div class="wrap">
 
-  <form id="tombolaForm">
-    <label>Név (nem kötelező):
-      <input name="name" autocomplete="name">
-    </label>
-    <label>Telefonszám*:
-      <input name="phone" required inputmode="tel" placeholder="+36...">
-    </label>
-    <label>
-      <input type="checkbox" name="consent" required>
-      Hozzájárulok ahhoz, hogy az adataimat a tombola lebonyolításához feldolgozzák.
-    </label>
-    <button type="submit">Jelentkezem</button>
-  </form>
+    <header>
+      <img src="/logo.jpg" alt="Aurora Bistro">
+      <h1>Nyereményjáték!</h1>
+      <p class="muted">Oszd meg a bejegyzést – rendelj pizzát – és vegyél részt a sorsoláson!</p>
+    </header>
 
-  <p id="msg"></p>
+    <section class="card">
+      <h2>Hogyan működik?</h2>
+      <p>Telefonszámodat minden rendelésnél kérjük a címeddel együtt – és máris benne vagy a játékban!</p>
 
-  <footer>
-    <p>📍 Strada Csorgo, Joseni 537130, Románia • ☎️ +40 758 504 137</p>
-  </footer>
+      <h3>Nyeremények</h3>
+      <ol class="prizes">
+        <li><strong>1. helyezés:</strong> egy Jura kávégép</li>
+        <li><strong>2. helyezés:</strong> egy 100 lej értékű ajándékcsomag</li>
+        <li><strong>3. helyezés:</strong> 2 személyes pizza utalvány</li>
+      </ol>
+
+      <p><strong>Sorsolás: december 22-én!</strong> Sok szerencsét kívánunk mindenkinek!</p>
+
+      <p class="footer">
+        📍 <strong>Strada Miléniumitér, Joseni 537130, Románia</strong><br>
+        ☎️ <a href="tel:+40758504137">+40 758 504 137</a>
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Jelentkezési űrlap</h2>
+      <form id="tombolaForm" autocomplete="on">
+        <label for="name">Név (opcionális)</label>
+        <input id="name" name="name" type="text" autocomplete="name" placeholder="Név (nem kötelező)">
+
+        <label for="phone">Telefonszám *</label>
+        <input id="phone" name="phone" type="tel" inputmode="tel" placeholder="+40…" required>
+
+        <label style="margin-top:10px">
+          <input type="checkbox" id="consent" name="consent" required>
+          Hozzájárulok, hogy adataimat a nyereményjátékhoz kezeljék.
+        </label>
+
+        <div style="margin-top:12px">
+          <button id="submitBtn" type="submit">Jelentkezem</button>
+          <span id="msg" class="muted" style="margin-left:10px"></span>
+        </div>
+      </form>
+    </section>
+
+    <p class="muted">Admin: <a href="/admin.html">/admin.html</a></p>
+  </div>
 
   <script>
-    document.getElementById('tombolaForm').onsubmit = async (e)=>{
+    const f = document.getElementById('tombolaForm');
+    const btn = document.getElementById('submitBtn');
+    const msg = document.getElementById('msg');
+
+    f.addEventListener('submit', async (e)=>{
       e.preventDefault();
-      const data = Object.fromEntries(new FormData(e.target).entries());
-      data.consent = !!data.consent;
-      const res = await fetch('/api/subscribe', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(data)
-      });
-      const json = await res.json().catch(()=>({message:'Hiba történt.'}));
-      document.getElementById('msg').textContent = json.message || 'Elküldve.';
-      if (res.ok) e.target.reset();
-    };
+      msg.textContent = '';
+      btn.disabled = true;
+
+      const data = {
+        name: document.getElementById('name').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        consent: document.getElementById('consent').checked
+      };
+
+      try{
+        const r = await fetch('/api/subscribe', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(data)
+        });
+        const j = await r.json();
+        if(r.ok){
+          msg.textContent = j.message || 'Sikeres jelentkezés! Sok szerencsét!';
+          f.reset();
+        }else{
+          msg.textContent = j.error || 'Hiba történt. Próbáld újra.';
+        }
+      }catch(_){
+        msg.textContent = 'Hálózati hiba. Próbáld újra.';
+      }finally{
+        btn.disabled = false;
+      }
+    });
   </script>
 </body>
 </html>
