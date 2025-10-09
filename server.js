@@ -1,8 +1,10 @@
-// Aurora Bistro Tombola – Express + Supabase Postgres (Render-ready)
+// Aurora Bistro Tombola – Express + Supabase Postgres (Render-ready);
 const express = require('express');
 const path = require('path');
 const crypto = require('crypto');
 const { Pool } = require('pg');
+const dns = require('dns');
+
 
 const app = express();
 app.use(express.json());
@@ -14,8 +16,12 @@ const DATABASE_URL = process.env.DATABASE_URL || '';
 
 const pool = new Pool({
   connectionString: DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
+  // Force IPv4 lookup so Render doesn’t try IPv6
+  lookup: (hostname, options, callback) =>
+    dns.lookup(hostname, { family: 4, hints: dns.ADDRCONFIG }, callback),
 });
+
 
 // --- DB init (run once at start)
 async function init() {
