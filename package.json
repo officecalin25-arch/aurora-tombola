@@ -1,13 +1,14 @@
 {
   "name": "aurora-tombola",
   "version": "1.0.0",
-  "description": "Aurora Bistro Tombola (Node + Express)",
+  "description": "Aurora Bistro Tombola (Node + Express + Supabase Postgres)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "pg": "^8.12.0"
   }
 }
