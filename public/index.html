@@ -2,62 +2,79 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Aurora Bistro Tombola 2025</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aurora Bistro – Nyereményjáték</title>
   <style>
-    body { font-family: system-ui, Arial, sans-serif; max-width: 640px; margin: 24px auto; padding: 0 12px; }
-    header, footer { text-align:center; }
-    img { max-width: 200px; display:block; margin: 12px auto; }
-    form { margin-top: 16px; }
-    label { display:block; margin: 10px 0; }
-    button { padding: 10px 16px; font-size: 16px; cursor: pointer; }
-    #msg { margin-top: 12px; font-weight: 600; }
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #fff8f0;
+      color: #222;
+      text-align: center;
+      padding: 40px;
+      line-height: 1.6;
+    }
+    img {
+      width: 120px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #d62b2b;
+      font-size: 2em;
+    }
+    h2, h3 {
+      color: #333;
+    }
+    ol, ul {
+      list-style: none;
+      padding: 0;
+    }
+    ol li, ul li {
+      margin: 8px 0;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 0.95em;
+      color: #555;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <img src="logo.jpg" alt="Aurora Bistro Logo">
-    <h1>🎄 Aurora Bistro Tombola 2025</h1>
-   <p><strong>Szabály:</strong><br>
-  Vásárolj egy pizzát, majd töltsd ki az űrlapot (rendelj pizzát).<br>
-  Helyszín: Strada Csorgo (Millennium tér).
-</p>
 
-  </header>
+  <img src="logo.jpg" alt="Aurora Bistro logó">
 
-  <form id="tombolaForm">
-    <label>Név (nem kötelező):
-      <input name="name" autocomplete="name">
-    </label>
-    <label>Telefonszám*:
-      <input name="phone" required inputmode="tel" placeholder="+36...">
-    </label>
-    <label>
-      <input type="checkbox" name="consent" required>
-      Hozzájárulok ahhoz, hogy az adataimat a tombola lebonyolításához feldolgozzák.
-    </label>
-    <button type="submit">Jelentkezem</button>
-  </form>
+  <h1>Nyereményjáték!</h1>
 
-  <p id="msg"></p>
+  <p>
+    Szeretnéd meglepni magad karácsonyra egy kávégéppel?<br>
+    Nincs más dolgod!
+  </p>
 
-  <footer>
-    <p>📍 Strada Csorgo, Joseni 537130, Románia • ☎️ +40 758 504 137</p>
-  </footer>
+  <ol>
+    <li>Oszd meg a bejegyzést</li>
+    <li>Rendelj pizzát!</li>
+  </ol>
 
-  <script>
-    document.getElementById('tombolaForm').onsubmit = async (e)=>{
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(e.target).entries());
-      data.consent = !!data.consent;
-      const res = await fetch('/api/subscribe', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(data)
-      });
-      const json = await res.json().catch(()=>({message:'Hiba történt.'}));
-      document.getElementById('msg').textContent = json.message || 'Elküldve.';
-      if (res.ok) e.target.reset();
-    };
-  </script>
+  <h2>Hogyan fog működni?</h2>
+
+  <p>
+    Telefonszámodat minden rendelésnél kérjük a címeddel együtt,<br>
+    és máris benne vagy a játékban!
+  </p>
+
+  <h3>Nyeremények:</h3>
+  <ul>
+    <li>1. helyezés: egy Jura kávégép</li>
+    <li>2. helyezés: egy 100 lej értékű ajándékcsomag</li>
+    <li>3. helyezés: 2 személyes pizza utalvány</li>
+  </ul>
+
+  <p><strong>Sorsolás: december 22-én!</strong><br>
+  Sok szerencsét kívánunk mindenkinek!</p>
+
+  <div class="footer">
+    📍 Strada Miléniumitér, Joseni 537130, Románia<br>
+    ☎️ +40 758 504 137
+  </div>
+
 </body>
 </html>
