@@ -1,19 +1,20 @@
-// Aurora Bistro Tombola server
+// Aurora Bistro Tombola server (minimal bootable version)
 const express = require('express');
 const path = require('path');
-const bodyParser = require('body-parser');   // keep if you use it
-const sqlite3 = require('sqlite3').verbose(); // keep if you use SQLite locally
-const crypto = require('crypto');
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// serve /public
+// serve static files from /public
 app.use(express.static(path.join(__dirname, 'public')));
 
 // explicit homepage route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+// required for Render
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log('Aurora Tombola listening on ' + PORT));
